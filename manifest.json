@@ -1,0 +1,24 @@
+{
+  "name": "Getting Started Example",
+  "version": "1.0",
+  "description": "Build an Extension!",
+  "manifest_version": 2,
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": false
+  },
+  "permissions": [
+    "storage"
+  ],
+  "content_scripts": [{
+    "matches": [
+      "https://zfilm-hd14.life/*"
+    ],
+    
+    "js": [
+      "contentScript.js"
+    ]
+  }]
+}
