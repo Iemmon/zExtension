@@ -10,15 +10,20 @@
     "persistent": false
   },
   "permissions": [
-    "storage"
+    "declarativeContent",
+    "storage",
+    "tabs"
   ],
   "content_scripts": [{
     "matches": [
       "https://zfilm-hd14.life/*"
     ],
-    
+       
     "js": [
       "contentScript.js"
     ]
-  }]
+  }],
+  "browser_action": {
+    "default_popup": "popup.html"
+  } 
 }
