@@ -12,7 +12,9 @@
   "permissions": [
     "declarativeContent",
     "storage",
-    "tabs"
+    "tabs",
+    "https://*/", 
+    "http://*/" 
   ],
   "content_scripts": [{
     "matches": [
@@ -20,6 +22,7 @@
     ],
        
     "js": [
+      "pluginUtilities.js",
       "contentScript.js"
     ]
   }],
