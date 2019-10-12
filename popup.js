@@ -12,7 +12,7 @@ chrome.storage.sync.get('color', function(data) {
 */
 chrome.storage.sync.get({ 'series': [] }, function ({ series: result }) {
   console.log(result);
-
+  //makeAMess();
     for (let el of result) {
 
       const tableElementTr = document.createElement("TR");
@@ -36,11 +36,14 @@ chrome.storage.sync.get({ 'series': [] }, function ({ series: result }) {
 
       document.getElementById("seriesTable").appendChild(tableElementTr);
 
-      var xhr = new XMLHttpRequest();
+      const xhr = new XMLHttpRequest();
       xhr.open("GET", el.link, true);
       xhr.responseType = 'document';
+      
       xhr.onload  = function () {
-
+        const currentSeries = getSeriesFromDOM(xhr.response);
+        
+        updateSeries(currentSeries);
         console.log(el.name);
         
       }
