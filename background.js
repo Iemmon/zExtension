@@ -4,14 +4,14 @@
 
 'use strict';
 
-chrome.runtime.onInstalled.addListener(function() {
-      chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
-        chrome.declarativeContent.onPageChanged.addRules([{
-         /*conditions: [ new chrome.declarativeContent.PageStateMatcher({
-            pageUrl: {hostEquals: '*'},
-          })
-          ],*/
-              actions: [new chrome.declarativeContent.ShowPageAction()]
-        }]);
-      });
-});
+const background  = function(){
+	
+    setInterval(function(){
+		checkNewEpisodes(function(newEpisodes){
+			chrome.browserAction.setBadgeText({ text: '' + newEpisodes});
+		});		
+  	}, 5000);
+}
+
+chrome.runtime.onStartup.addListener(background);
+chrome.runtime.onInstalled.addListener(background);
