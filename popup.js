@@ -13,34 +13,49 @@ chrome.storage.sync.get('color', function(data) {
 const draw = function () {
 	chrome.storage.sync.get({ 'series': [] }, function ({ series: result }) {
 		console.log(result);
-		// makeAMess();
+		//makeAMess();
+		result = sortNewEpisodesFirst(result);
 		document.getElementById("seriesTable").innerHTML = '';
 
 		for (let el of result) {
 
+			const newLabel = document.createElement("div");
+			newLabel.className = "new";
+			newLabel.innerText = "new";
+
+
 			const tableElementTr = document.createElement("TR");
 
 			const textnodeNameTd = document.createElement("td");
-			// textnodeNameTd.innerText = el.name;
+			textnodeNameTd.className = "name";
 
 			const linkElement = document.createElement("a");
 			linkElement.href = '#';
 			linkElement.innerText = el.name;
 			linkElement.onclick = function () {
 				chrome.tabs.create({ active: true, url: el.link });
+				el.newEpisode = false;
+				chrome.storage.sync.set({ 'series': result }, function () {
+                    //console.log("array updated");
+                });
 			}
+
+			if(el.newEpisode)
+				linkElement.appendChild(newLabel);
 
 			const textnodeEpisodeTd = document.createElement("td");
 			textnodeEpisodeTd.innerText = el.lastEpisode;
+			textnodeEpisodeTd.className = "episode";
 
-			const removeButton = document.createElement("button");
-			removeButton.innerText = "remove";
+			const removeButton = document.createElement("span");
+			removeButton.className = "remove"
+			removeButton.innerText = " ";
 
 			textnodeNameTd.appendChild(linkElement);
 			tableElementTr.appendChild(textnodeNameTd);
 			tableElementTr.appendChild(textnodeEpisodeTd);
 			tableElementTr.appendChild(removeButton);
-
+			
 			document.getElementById("seriesTable").appendChild(tableElementTr);
 
 			removeButton.onclick = (function (element) {

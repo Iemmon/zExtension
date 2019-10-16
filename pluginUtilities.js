@@ -39,7 +39,7 @@ function getSeriesFromDOM(document) {
     return seriesObject;
 };
 
-function makeAMess(){
+function makeAMess() {
 
     chrome.storage.sync.get({ 'series': [] }, function ({ series: result }) {
         for (let el of result) {
@@ -51,21 +51,45 @@ function makeAMess(){
     });
 }
 
+function sortNewEpisodesFirst(array) {
+    for (let i = 0; i < array.length; i++) {
+        if (array[i].newEpisode) {
+            array.unshift(...array.splice(i, 1));
+        }
+    }
+    return array;
+}
+
 function updateSeries(updatedSeries) {
 
     chrome.storage.sync.get({ 'series': [] }, function ({ series: result }) {
 
-        for (let elFromStorage of result) {
-             //console.log(el);
-             //console.log(updatedSeries);
-            if (elFromStorage.name == updatedSeries.name) {
-                console.log(elFromStorage);
-                console.log(elFromStorage.lastEpisode + " changed to " + updatedSeries.lastEpisode);
-                elFromStorage.lastEpisode = updatedSeries.lastEpisode;
+        for (let i = 0; i < result.length; i++) {
+            if (result[i].name == updatedSeries.name && result[i].lastEpisode != updatedSeries.lastEpisode) {
+                //console.log(result[i]);
+                console.log(result[i].lastEpisode + " changed to " + updatedSeries.lastEpisode);
+                result[i].lastEpisode = updatedSeries.lastEpisode;
+                result[i].newEpisode = true;
                 chrome.storage.sync.set({ 'series': result }, function () {
                     //console.log("array updated");
                 });
             }
         }
     });
+}
+function checkNewEpisodes(setBadge) {
+   
+    chrome.storage.sync.get({ 'series': [] }, function ({ series: result }) {
+        let newEpisodes = 0;
+        for (let i = 0; i < result.length; i++) {
+            console.log(result[i].newEpisode + "ne");
+            if (result[i].newEpisode) {
+                console.log(result[i].newEpisode + "ne");
+                newEpisodes += 1;
+            }
+        }
+        setBadge(newEpisodes);
+    });
+    console.log("NE " + newEpisodes);
+    return newEpisodes;
 }
